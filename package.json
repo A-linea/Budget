@@ -2,5 +2,11 @@
   "name": "Budget",
   "version": "1.0.0",
   "main": "app.js",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "babel-preset-env": "^1.6.1"
+  },
+  "devDependencies": {
+    "babel-core": "^6.26.0"
+  }
 }
