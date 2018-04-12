@@ -103,6 +103,17 @@ var UIController = (function () {
       document.querySelector(element).insertAdjacentHTML('beforeend', newHtml);
     },
 
+    clearFields : function() {
+      var fields, fieldsArr;
+      fields = document.querySelectorAll(DOMstrings.inputDescription + ', ' + DOMstrings.inputValue); 
+
+      fieldsArr = Array.prototype.slice.call(fields);
+      fieldsArr.forEach(function(current, index, array) {
+        current.value = "";
+      });
+      fieldsArr[0].focus();
+    },
+
     getDOMstrings: function () {
       return DOMstrings;
     }
@@ -119,6 +130,7 @@ var controller = (function (budgetCtrl, UICtrl) {
 
     document.addEventListener('keypress', function (event) {
       if (event.keyCode === 13 || event.which === 13) {
+        event.preventDefault();
         ctrlAddItem();
       }
     });
@@ -137,10 +149,14 @@ var controller = (function (budgetCtrl, UICtrl) {
     newItem = budgetCtrl.addItem(input.type, input.description, input.value);
 
     // 3. Добавить новый элемент в UI
-    UICtrl.addListItem(newItem, input.type)
-    // 4. Расчитать бюджет
+    UICtrl.addListItem(newItem, input.type);
 
-    // 5. Отобразить новое значение бюджета в UI
+    // 4. Очистить поля
+    UIController.clearFields();
+
+    // 5. Расчитать бюджет
+
+    // 6. Отобразить новое значение бюджета в UI
 
 
   }
