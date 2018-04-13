@@ -169,6 +169,12 @@ var UIController = (function () {
     return  (type === 'exp' ? '-' : '+') + ' ' + int + '.' + dec;
   };
 
+  var nodeListForEach = function (list, callback) {
+    for (var i = 0; i < list.length; i++) {
+      callback(list[i], i); 
+    }
+  };
+
   //Public method
   return {
     getInput: function () {
@@ -232,14 +238,9 @@ var UIController = (function () {
     },
 
     displayPercentages: function (percentages) {
-      var fields, nodeListForEach;
+      var fields;
       fields = document.querySelectorAll(DOMstrings.expensesPercentageLabel);
       
-      nodeListForEach = function (list, callback) {
-        for (var i = 0; i < list.length; i++) {
-          callback(list[i], i)   
-        }
-      };
       nodeListForEach(fields, function(current, index) {
         if (percentages[index] > 0) {
           current.textContent = percentages[index] + '%';
@@ -255,8 +256,23 @@ var UIController = (function () {
       months = ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'];
       month = now.getMonth();
       document.querySelector(DOMstrings.dateLabel).textContent = months[month] + ' ' + year;
-
     },
+
+    changeType: function () {
+      var fields;
+
+      fields = document.querySelectorAll(
+        DOMstrings.inputType + ',' +
+        DOMstrings.inputDescription + ',' +
+        DOMstrings.inputValue);
+
+        nodeListForEach(fields, function(cur) {
+          cur.classList.toggle('red-focus');
+        });
+
+        document.querySelector(DOMstrings.inputBtn).classList.toggle('red');
+    },
+
     getDOMstrings: function () {
       return DOMstrings;
     }
@@ -278,6 +294,7 @@ var controller = (function (budgetCtrl, UICtrl) {
     });
 
     document.querySelector(DOM.container).addEventListener('click', ctrlDeleteItem);
+    document.querySelector(DOM.inputType).addEventListener('change', UICtrl.changeType);
 
   };
 
@@ -300,7 +317,7 @@ var controller = (function (budgetCtrl, UICtrl) {
     var percentages = budgetCtrl.getPercentages();
     //3. Update the UI with the new percentages
     UICtrl.displayPercentages(percentages);
-  }
+  };
 
   var ctrlAddItem = function () {
     var input, newItem;
